@@ -1,5 +1,6 @@
 package ru.safronov.mySpringProject.hw1;
 
+import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -16,6 +17,10 @@ public class StudentRepository {
 
   public StudentRepository() {
     this.students = new ArrayList<>();
+  }
+
+  @PostConstruct
+  private void fillData() {
     students.add(new Student("Olga Ivanova", "geography"));
     students.add(new Student("Nastia Petrova", "IT"));
     students.add(new Student("Elena Ivanova", "physical_education"));

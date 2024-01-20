@@ -1,6 +1,7 @@
 package ru.safronov.mySpringProject.hw1;
 
 import java.util.List;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -16,11 +16,6 @@ public class Reader {
    */
   private int booksCount;
   /**
-   * Максимально возможное количество книг на руках
-   */
-  @Value("${application.issue.max-allowed-books:1}")
-  private int maxAllowedBooks;
-  /**
    * Список выдачей пользователя
    */
   private List<Issue> issueList;
@@ -28,7 +23,6 @@ public class Reader {
   public Reader(String name) {
     this.id = sequence++;
     this.name = name;
-    this.maxAllowedBooks = 3;
     this.issueList = new ArrayList<>();
   }
 

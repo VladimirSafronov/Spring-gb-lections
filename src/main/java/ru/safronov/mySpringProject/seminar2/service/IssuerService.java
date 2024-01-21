@@ -3,6 +3,7 @@ package ru.safronov.mySpringProject.seminar2.service;
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.safronov.mySpringProject.seminar2.api.IssueRequest;
 import ru.safronov.mySpringProject.seminar2.exceptions.TooManyBooksException;
@@ -16,7 +17,11 @@ import ru.safronov.mySpringProject.seminar2.repository.ReaderRepository;
 @RequiredArgsConstructor
 public class IssuerService {
 
-  // спринг это все заинжектит
+  /**
+   * Максимально возможное количество книг на руках
+   */
+  @Value("${application.issue.max-allowed-books:1}")
+  private int maxAllowedBooks;
   private final BookRepository bookRepository;
   private final ReaderRepository readerRepository;
   private final IssueRepository issueRepository;
@@ -33,7 +38,7 @@ public class IssuerService {
 
     Issue issue;
     Reader reader = readerRepository.getReaderById(request.getReaderId());
-    if (reader.getBooksCount() < reader.getMaxAllowedBooks()) {
+    if (reader.getBooksCount() < maxAllowedBooks) {
       issue = new Issue(request.getBookId(), request.getReaderId());
       issueRepository.save(issue);
       reader.getIssueList().add(issue);

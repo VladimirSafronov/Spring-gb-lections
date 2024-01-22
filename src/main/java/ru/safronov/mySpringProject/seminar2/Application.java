@@ -3,8 +3,8 @@ package ru.safronov.mySpringProject.seminar2;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
-public class Application {
+//@SpringBootApplication
+//public class Application {
 
 	// http://localhost:8080/swagger-ui.html
 
@@ -53,8 +53,8 @@ public class Application {
 			spring-web.jar
 	 */
 
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
-	}
-
-}
+//	public static void main(String[] args) {
+//		SpringApplication.run(Application.class, args);
+//	}
+//
+//}

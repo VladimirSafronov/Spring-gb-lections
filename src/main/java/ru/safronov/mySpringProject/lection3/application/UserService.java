@@ -13,10 +13,13 @@ public class UserService {
   }
 
   public List<User> getAllUsers() {
+    repository.save(new User(null, "Boris", "borsi@ya.ru"));
+    repository.save(new User(null, "Andrey", "andy@ya.ru"));
+    repository.save(new User(null, "Bobby", "bob@ya.ru"));
     return repository.findAll();
   }
 
   public User getUserById(Long id) {
-    return repository.findUser(id);
+    return repository.findById(id).get();
   }
 }

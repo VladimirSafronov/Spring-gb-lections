@@ -3,10 +3,7 @@ package ru.safronov.mySpringProject.Library;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
-public class Application {
-
-	// http://localhost:8080/swagger-ui.html
+// http://localhost:8080/swagger-ui.html
 
 	/*
 	 * План занятия:
@@ -53,8 +50,12 @@ public class Application {
 			spring-web.jar
 	 */
 
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
-	}
-
-}
+//@SpringBootApplication
+//public class Application {
+//
+//
+//  public static void main(String[] args) {
+//    SpringApplication.run(Application.class, args);
+//  }
+//
+//}

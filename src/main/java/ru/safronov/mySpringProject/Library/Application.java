@@ -50,12 +50,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 			spring-web.jar
 	 */
 
-//@SpringBootApplication
-//public class Application {
-//
-//
-//  public static void main(String[] args) {
-//    SpringApplication.run(Application.class, args);
-//  }
-//
-//}
+@SpringBootApplication
+public class Application {
+
+
+  public static void main(String[] args) {
+    SpringApplication.run(Application.class, args);
+  }
+
+}

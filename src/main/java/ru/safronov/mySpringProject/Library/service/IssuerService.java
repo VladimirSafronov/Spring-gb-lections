@@ -3,13 +3,13 @@ package ru.safronov.mySpringProject.Library.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.safronov.mySpringProject.Library.api.IssueRequest;
 import ru.safronov.mySpringProject.Library.exceptions.TooManyBooksException;
+import ru.safronov.mySpringProject.Library.model.Book;
 import ru.safronov.mySpringProject.Library.model.Issue;
 import ru.safronov.mySpringProject.Library.model.Reader;
 import ru.safronov.mySpringProject.Library.repository.BookRepository;
@@ -31,22 +31,15 @@ public class IssuerService {
   private final IssueRepository issueRepository;
 
   public Issue issue(IssueRequest request) {
-    if (bookRepository.getBookById(request.getBookId()) == null) {
-      throw new NoSuchElementException(
-          "Не найдена книга с идентификатором \"" + request.getBookId() + "\"");
-    }
-    if (readerRepository.getReaderById(request.getReaderId()) == null) {
-      throw new NoSuchElementException(
-          "Не найден читатель с идентификатором \"" + request.getReaderId() + "\"");
-    }
 
     Issue issue;
-    Reader reader = readerRepository.getReaderById(request.getReaderId());
+    Book book = bookRepository.getReferenceById(request.getBookId());
+    Reader reader = readerRepository.getReferenceById(request.getReaderId());
     if (reader.getBooksCount() < maxAllowedBooks) {
-      issue = new Issue(request.getBookId(), request.getReaderId());
+      issue = new Issue(book.getId(), reader.getId());
       issueRepository.save(issue);
-      reader.getIssueList().add(issue);
       reader.setBooksCount(reader.getBooksCount() + 1);
+      readerRepository.saveAndFlush(reader);
     } else {
       throw new TooManyBooksException(
           "У читателя с идетнификатором " + reader.getId() + " на руках "
@@ -56,22 +49,17 @@ public class IssuerService {
   }
 
   public Issue getIssue(long id) {
-    Issue issue = issueRepository.getIssueById(id);
-    if (issue == null) {
-      throw new NoSuchElementException(
-          "Не найдено записи в книге выдачи под идентификатором " + id);
-    }
-    return issue;
+    return issueRepository.getReferenceById(id);
   }
 
   public void returnBook(Issue issue) {
-    Reader reader = readerRepository.getReaderByIssue(issue);
-    if (reader == null) {
-      throw new NoSuchElementException("Не найдено читателя, с записью о выдаче книги: " + issue);
-    }
-    reader.getIssueList().remove(issue);
-    reader.setBooksCount(reader.getBooksCount() - 1);
+
+    Reader reader = readerRepository.getReferenceById(
+        issueRepository.getReferenceById(issue.getId()).getReaderId());
     issue.setReturned_at(LocalDateTime.now());
+    reader.setBooksCount(reader.getBooksCount() - 1);
+    issueRepository.saveAndFlush(issue);
+
   }
 
   /**
@@ -80,13 +68,13 @@ public class IssuerService {
    */
   public List<List<String>> getIssuesData() {
     List<List<String>> allIssuesData = new ArrayList<>();
-    for (Issue issue : issueRepository.getIssues()) {
-      String bookName = bookRepository.getBookById(issue.getBookId()).getName();
-      String readerName = readerRepository.getReaderById(issue.getReaderId()).getName();
-      String issuedAt = issueRepository.getIssueById(issue.getId()).getIssued_at().toString();
+    for (Issue issue : issueRepository.findAll()) {
+      String bookName = bookRepository.getReferenceById(issue.getBookId()).getName();
+      String readerName = readerRepository.getReferenceById(issue.getReaderId()).getName();
+      String issuedAt = issueRepository.getReferenceById(issue.getId()).getIssued_at().toString();
       String returnedAt =
-          issueRepository.getIssueById(issue.getId()).getReturned_at() == null ? "" :
-              issueRepository.getIssueById(issue.getId()).getReturned_at().toString();
+          issueRepository.getReferenceById(issue.getId()).getReturned_at() == null ? "" :
+              issueRepository.getReferenceById(issue.getId()).getReturned_at().toString();
       allIssuesData.add(List.of(bookName, readerName, issuedAt, returnedAt));
       log.info(allIssuesData.toString());
     }

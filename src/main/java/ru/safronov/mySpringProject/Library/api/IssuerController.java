@@ -21,6 +21,7 @@ import ru.safronov.mySpringProject.Library.service.IssuerService;
 @RequiredArgsConstructor
 @RequestMapping("/issue")
 public class IssuerController {
+
   private final IssuerService service;
 
   @PutMapping(path = "/{issueId}")
@@ -44,9 +45,8 @@ public class IssuerController {
     final Issue issue;
     try {
       issue = service.issue(request);
-    } catch (NoSuchElementException e) {
-      return ResponseEntity.notFound().build();
     } catch (TooManyBooksException e) {
+      log.info(e.getMessage());
       return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
     return new ResponseEntity<>(issue, HttpStatus.OK);
@@ -54,12 +54,6 @@ public class IssuerController {
 
   @GetMapping(path = "/{id}")
   public ResponseEntity<Issue> getIssueInfo(@PathVariable long id) {
-    final Issue issue;
-    try {
-      issue = service.getIssue(id);
-    } catch (NoSuchElementException ex) {
-      return ResponseEntity.notFound().build();
-    }
-    return new ResponseEntity<>(issue, HttpStatus.OK);
+    return new ResponseEntity<>(service.getIssue(id), HttpStatus.OK);
   }
 }

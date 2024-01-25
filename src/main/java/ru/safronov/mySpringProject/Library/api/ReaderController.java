@@ -1,7 +1,6 @@
 package ru.safronov.mySpringProject.Library.api;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,40 +24,21 @@ public class ReaderController {
 
   @GetMapping(path = "/{id}")
   public ResponseEntity<Reader> getReaderById(@PathVariable long id) {
-    final Reader reader;
-    try {
-      reader = service.getReader(id);
-    } catch (NoSuchElementException ex) {
-      return ResponseEntity.notFound().build();
-    }
-    return new ResponseEntity<>(reader, HttpStatus.OK);
+    return new ResponseEntity<>(service.getReader(id), HttpStatus.OK);
   }
 
   @PostMapping
   public ResponseEntity<Reader> createReader(@RequestParam String name) {
-    Reader reader = service.createReader(name);
-    return new ResponseEntity<>(reader, HttpStatus.CREATED);
+    return new ResponseEntity<>(service.createReader(name), HttpStatus.CREATED);
   }
 
   @DeleteMapping(path = "/{id}")
   public ResponseEntity<List<Reader>> deleteReader(@PathVariable long id) {
-    final List<Reader> readers;
-    try {
-      readers = service.deleteReader(id);
-    } catch (NoSuchElementException ex) {
-      return ResponseEntity.notFound().build();
-    }
-    return new ResponseEntity<>(readers, HttpStatus.OK);
+    return new ResponseEntity<>(service.deleteReader(id), HttpStatus.OK);
   }
 
   @GetMapping(path = "/{id}/issue")
   public ResponseEntity<List<Issue>> getReaderIssueList(@PathVariable long id) {
-    final List<Issue> issues;
-    try {
-      issues = service.getIssueList(id);
-    } catch (NoSuchElementException ex) {
-      return ResponseEntity.notFound().build();
-    }
-    return new ResponseEntity<>(issues, HttpStatus.OK);
+    return new ResponseEntity<>(service.getIssueList(id), HttpStatus.OK);
   }
 }

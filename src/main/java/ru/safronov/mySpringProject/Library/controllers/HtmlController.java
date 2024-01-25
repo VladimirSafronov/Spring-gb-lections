@@ -1,6 +1,6 @@
 package ru.safronov.mySpringProject.Library.controllers;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,18 +12,13 @@ import ru.safronov.mySpringProject.Library.service.IssuerService;
 import ru.safronov.mySpringProject.Library.service.ReaderService;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/ui")
 public class HtmlController {
 
   private final BookService bookService;
   private final ReaderService readerService;
   private final IssuerService issuerService;
-
-  public HtmlController(BookService bookService, ReaderService readerService, IssuerService issuerService) {
-    this.bookService = bookService;
-    this.readerService = readerService;
-    this.issuerService = issuerService;
-  }
 
   @GetMapping("/books")
   public String getAvailableBooks(Model model) {

@@ -1,19 +1,31 @@
 package ru.safronov.mySpringProject.Library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
+@Entity
+@Table(name = "books")
 @Data
-@RequiredArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Book {
 
-  public static long sequence = 1L;
+  private static long sequence = 1L;
 
-  private final long id;
-  private final String name;
+  @Id
+  @Column(name = "id")
+  private Long id;
+  @Column(name = "name")
+  private String name;
 
   public Book(String name) {
-    this(sequence++, name);
+    this.id = sequence++;
+    this.name = name;
   }
 
+  public Book() {
+  }
 }

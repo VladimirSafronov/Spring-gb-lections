@@ -13,8 +13,8 @@ import ru.safronov.mySpringProject.seminar4springData.repository.UserRepository;
 @NoRepositoryBean
 public interface UserRepository extends JpaRepository<User, Long>, PagingAndSortingRepository<User, Long> {
 
-  @Query(nativeQuery = true, value = "SELECT * FROM USERS") // select u from Users u
-  List<Object[]> myquery2();
+//  @Query(nativeQuery = true, value = "SELECT * FROM USERS") // select u from Users u
+//  List<Object[]> myquery2();
 
   // jql
   @Query("select u from User u where u.name = :myvalue")

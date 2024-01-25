@@ -20,33 +20,23 @@ import ru.safronov.mySpringProject.Library.service.BookService;
 @RequestMapping(path = "/book")
 public class BookController {
 
-  private final BookService service;
-
-//  public BookController(BookService bookService) {
-//    this.service = bookService;
-//  }
+  private final BookService bookService;
 
   @GetMapping
   public ResponseEntity<List<Book>> getAllBooks() {
-    return new ResponseEntity<>(service.getAllBooks(), HttpStatus.OK);
+    return new ResponseEntity<>(bookService.getAllBooks(), HttpStatus.OK);
   }
 
   @GetMapping(path = "/{id}")
-  public ResponseEntity<Book> getBookInfo(@PathVariable long id) {
-    final Book book;
-    try {
-      book = service.getBookById(id);
-    } catch (NoSuchElementException ex) {
-      return ResponseEntity.notFound().build();
-    }
-    return new ResponseEntity<>(book, HttpStatus.OK);
+  public ResponseEntity<Book> getBookInfo(@PathVariable Long id) {
+    return new ResponseEntity<>(bookService.getBookById(id), HttpStatus.OK);
   }
 
   @DeleteMapping(path = "/{id}")
-  public ResponseEntity<List<Book>> deleteBook(@PathVariable long id) {
+  public ResponseEntity<List<Book>> deleteBook(@PathVariable Long id) {
     final List<Book> books;
     try {
-      books = service.deleteBook(id);
+      books = bookService.deleteBook(id);
     } catch (NoSuchElementException ex) {
       return ResponseEntity.notFound().build();
     }
@@ -55,7 +45,7 @@ public class BookController {
 
   @PostMapping
   public ResponseEntity<Book> createBook(@RequestParam String name) {
-    Book book = service.addBook(name);
+    Book book = bookService.addBook(name);
     return new ResponseEntity<>(book, HttpStatus.CREATED);
   }
 }
